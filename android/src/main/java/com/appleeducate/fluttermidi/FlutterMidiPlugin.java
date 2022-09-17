@@ -25,7 +25,7 @@ public class FlutterMidiPlugin implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
 
   /** Plugin registration. */
-  @SuppressWarnings("deprecation")
+  @SuppressWarnings({"deprecation","removal"})
   public static void registerWith(Registrar registrar) {
     final FlutterMidiPlugin instance = new FlutterMidiPlugin();
     instance.onAttachedToEngine(registrar.context(), registrar.messenger());
