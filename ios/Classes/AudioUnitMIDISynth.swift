@@ -282,9 +282,7 @@ class AudioUnitMIDISynth: NSObject {
         let noteCommand = UInt32(0x90 | channel)
         let pcCommand = UInt32(0xC0 | channel)
         var status = OSStatus(noErr)
-        if velocity < 0 {
-            velocity = 64 
-        }
+
         status = MusicDeviceMIDIEvent(self.midisynthUnit!, pcCommand, patch2, 0, 0)
         AudioUtils.CheckError(status)
         status = MusicDeviceMIDIEvent(self.midisynthUnit!, noteCommand, UInt32(midi), UInt32(velocity), 0)
@@ -296,9 +294,7 @@ class AudioUnitMIDISynth: NSObject {
         let channel = UInt32(0)
         let noteCommand = UInt32(0x80 | channel)
         var status = OSStatus(noErr)
-        if velocity < 0 {
-            velocity = 64 
-        }
+
         status = MusicDeviceMIDIEvent(self.midisynthUnit!, noteCommand, UInt32(midi), UInt32(velocity), 0)
         AudioUtils.CheckError(status)
     }
