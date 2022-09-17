@@ -37,15 +37,19 @@ public class FlutterMidiPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   /*
-    "Also, note that the plugin should still contain the static registerWith() method 
-    to remain compatible with apps that don’t use the v2 Android embedding. 
-    (See Upgrading pre 1.12 Android projects for details.) The easiest thing to 
-    do (if possible) is move the logic from registerWith() into a private method that 
-    both registerWith() and onAttachedToEngine() can call. Either registerWith() or 
-    onAttachedToEngine() will be called, not both."
-
-    - https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration
-  */
+   * "Also, note that the plugin should still contain the static registerWith()
+   * method
+   * to remain compatible with apps that don’t use the v2 Android embedding.
+   * (See Upgrading pre 1.12 Android projects for details.) The easiest thing to
+   * do (if possible) is move the logic from registerWith() into a private method
+   * that
+   * both registerWith() and onAttachedToEngine() can call. Either registerWith()
+   * or
+   * onAttachedToEngine() will be called, not both."
+   * 
+   * - https://flutter.dev/docs/development/packages-and-plugins/plugin-api-
+   * migration
+   */
   private void onAttachedToEngine(Context applicationContext, BinaryMessenger messenger) {
     methodChannel = new MethodChannel(messenger, "flutter_midi");
     methodChannel.setMethodCallHandler(new FlutterMidiPlugin());
@@ -94,18 +98,23 @@ public class FlutterMidiPlugin implements MethodCallHandler, FlutterPlugin {
       }
     } else if (call.method.equals("play_midi_note")) {
       int _note = call.argument("note");
+      int _velocity = call.argument("velocity");
+      if (_velocity < 0) {
+        _velocity = 64;
+      }
       try {
         ShortMessage msg = new ShortMessage();
-        msg.setMessage(ShortMessage.NOTE_ON, 0, _note, 127);
+        msg.setMessage(ShortMessage.NOTE_ON, 0, _note, _velocity);
         recv.send(msg, -1);
       } catch (InvalidMidiDataException e) {
         e.printStackTrace();
       }
     } else if (call.method.equals("stop_midi_note")) {
       int _note = call.argument("note");
+      int _velocity = call.argument("velocity");
       try {
         ShortMessage msg = new ShortMessage();
-        msg.setMessage(ShortMessage.NOTE_OFF, 0, _note, 127);
+        msg.setMessage(ShortMessage.NOTE_OFF, 0, _note, _velocity);
         recv.send(msg, -1);
       } catch (InvalidMidiDataException e) {
         e.printStackTrace();
